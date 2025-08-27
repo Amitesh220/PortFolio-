@@ -4,12 +4,12 @@ import { useEffect } from "react";
 
 const GlowCard = ({ children, identifier }) => {
   useEffect(() => {
-    if (typeof document === "undefined") return; // ✅ Avoid SSR crash
+    if (typeof window === "undefined" || typeof document === "undefined") return; // ✅ Avoid SSR crash
 
     const CONTAINER = document.querySelector(`.glow-container-${identifier}`);
     const CARDS = document.querySelectorAll(`.glow-card-${identifier}`);
 
-    if (!CONTAINER || CARDS.length === 0) return; // ✅ Extra safety check
+    if (!CONTAINER || CARDS.length === 0) return; // ✅ Prevent null errors
 
     const CONFIG = {
       proximity: 40,
@@ -56,15 +56,13 @@ const GlowCard = ({ children, identifier }) => {
     document.body.addEventListener("pointermove", UPDATE);
 
     const RESTYLE = () => {
-      if (CONTAINER) {
-        CONTAINER.style.setProperty("--gap", CONFIG.gap);
-        CONTAINER.style.setProperty("--blur", CONFIG.blur);
-        CONTAINER.style.setProperty("--spread", CONFIG.spread);
-        CONTAINER.style.setProperty(
-          "--direction",
-          CONFIG.vertical ? "column" : "row"
-        );
-      }
+      CONTAINER.style.setProperty("--gap", CONFIG.gap);
+      CONTAINER.style.setProperty("--blur", CONFIG.blur);
+      CONTAINER.style.setProperty("--spread", CONFIG.spread);
+      CONTAINER.style.setProperty(
+        "--direction",
+        CONFIG.vertical ? "column" : "row"
+      );
     };
 
     RESTYLE();
