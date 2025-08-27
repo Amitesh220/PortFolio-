@@ -25,6 +25,7 @@ const GlowCard = ({ children, identifier }) => {
 
       for (const CARD of CARDS) {
         const CARD_BOUNDS = CARD.getBoundingClientRect();
+        if (!CARD_BOUNDS) continue;
 
         if (
           event.x > CARD_BOUNDS.left - CONFIG.proximity &&
@@ -56,6 +57,7 @@ const GlowCard = ({ children, identifier }) => {
     document.body.addEventListener("pointermove", UPDATE);
 
     const RESTYLE = () => {
+      if (!CONTAINER) return;
       CONTAINER.style.setProperty("--gap", CONFIG.gap);
       CONTAINER.style.setProperty("--blur", CONFIG.blur);
       CONTAINER.style.setProperty("--spread", CONFIG.spread);
@@ -74,7 +76,9 @@ const GlowCard = ({ children, identifier }) => {
 
   return (
     <div className={`glow-container-${identifier} glow-container`}>
-      <article className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}>
+      <article
+        className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}
+      >
         <div className="glows"></div>
         {children}
       </article>
