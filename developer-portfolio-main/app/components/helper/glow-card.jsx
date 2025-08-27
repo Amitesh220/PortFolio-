@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 
 const GlowCard = ({ children, identifier }) => {
   useEffect(() => {
+    if (typeof document === "undefined") return; // ✅ Avoid SSR errors
+
     const CONTAINER = document.querySelector(`.glow-container-${identifier}`);
     const CARDS = document.querySelectorAll(`.glow-card-${identifier}`);
 
@@ -17,7 +19,7 @@ const GlowCard = ({ children, identifier }) => {
     };
 
     const UPDATE = (event) => {
-      if (!event) return; // ✅ Prevent running when no event is provided
+      if (!event) return;
 
       for (const CARD of CARDS) {
         const CARD_BOUNDS = CARD.getBoundingClientRect();
@@ -62,7 +64,6 @@ const GlowCard = ({ children, identifier }) => {
     };
 
     RESTYLE();
-    // ❌ Removed UPDATE() call without event
 
     return () => {
       document.body.removeEventListener('pointermove', UPDATE);
